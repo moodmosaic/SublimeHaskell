@@ -1,7 +1,7 @@
 This is *my* fork of [SublimeHaskell/SublimeHaskell][SublimeHaskell/SublimeHaskell]. — Key improvements:
 
 - Syntax for Haskell and Cabal is rewritten (in sync with [sublimehq#2225][sublimehq#2225])
-- Syntax for Haskell has its own *dedicated* color scheme (based on Monokai)
+- Syntax for Haskell has its own *dedicated* Monokai-based color scheme
 - Output pane is removed in favor of built-in gutter icons
 
 ---
