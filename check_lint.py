@@ -100,7 +100,7 @@ class ChainRunner(object):
                                    'message': 'Backend error encountered during \'{0}\': {1}'.format(self.caption, exc)}})
         self.status_msg.result_fail()
         ## Paranoia: Ensure that mark_response() executes in the UI thread
-        sublime.set_timeout(self.process_error, 0)
+        sublime.set_timeout(self.show_autofixes, 0)
 
 
     def process_corrections(self, corrections):
