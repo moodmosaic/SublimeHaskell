@@ -317,10 +317,11 @@ class MarkerManager(object):
 
     def make_message_panel(self, view, text, cabal_project_dir, panel_out):
         '''Create the message panel for error/warnings/hints/uncategorized errors'''
-        self.message_panel = Common.output_panel(view.window(), text, panel_name=OUTPUT_PANEL_NAME, syntax='HaskellOutputPanel',
-                                                 panel_display=panel_out)
-        self.message_panel.settings().set("result_file_regex", Regexes.RESULT_FILE_REGEX)
-        self.message_panel.settings().set("result_base_dir", cabal_project_dir)
+        None
+        # self.message_panel = Common.output_panel(view.window(), text, panel_name=OUTPUT_PANEL_NAME, syntax='HaskellOutputPanel',
+        #                                          panel_display=panel_out)
+        # self.message_panel.settings().set("result_file_regex", Regexes.RESULT_FILE_REGEX)
+        # self.message_panel.settings().set("result_base_dir", cabal_project_dir)
 
 
 MARKER_MANAGER = MarkerManager()
