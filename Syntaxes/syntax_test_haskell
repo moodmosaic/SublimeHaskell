@@ -1,324 +1,258 @@
 -- SYNTAX TEST "Packages/SublimeHaskell/Syntaxes/Haskell-SublimeHaskell.sublime-syntax"
-{-# LANGUAGE GADTs #-}
---  ^^^^^^^^ keyword.preprocessor.haskell
---           ^^^^^ keyword.other.preprocessor.haskell
--- <-comment.pragma.haskell
-{-# OPTIONS_GHC -O2 #-}
--- <-comment.pragma.haskell
 
-{- This is an interior comment.
- -- with a double dash comment embedded. {- and a comment within a comment
- -}-}
--- <- comment.block.haskell
+23*36  -- single line comment
+--     ^^ punctuation.definition.comment.haskell
+--     ^^^^^^^^^^^^^^^^^^^^^^^ comment.line.double-dash.haskell
+23*36
+-- <- - comment.line.double-dash.haskell
 
-module Arrays (
-  -- Export list comment, because we like them
-  -- <- comment.line.double-dash.haskell
-  Type(..)
-) where
+   {- block comment -} 23*36
+-- ^^ punctuation.definition.comment.begin.haskell
+-- ^^^^^^^^^^^^^^^^^^^ comment.block.haskell
+--                  ^^ punctuation.definition.comment.end.haskell
+--                    ^ - comment.block.haskell
 
-import Data.List (sort, nub) -- import comment (PASS)
+   {- {-# #-} -} 23*36
+-- ^^ punctuation.definition.comment.begin.haskell
+-- ^^^^^^^^^^^^^ comment.block.haskell - meta.preprocessor.haskell
+--            ^^ punctuation.definition.comment.end.haskell
+--              ^ - comment.block.haskell
 
--- Normal comment
--- <- comment.line.double-dash.haskell
---Normal comment missing space
--- <- comment.line.double-dash.haskell
+   {- {- #-} -} 23*36
+-- ^^ punctuation.definition.comment.begin.haskell
+-- ^^^^^^^^^^^^ comment.block.haskell
+--           ^^ punctuation.definition.comment.end.haskell
+--             ^ - comment.block.haskell
 
-{- Various data type definitions -}
-data SimpleThing = Foo | Bar Int | Baz | Quux
--- ^ keyword.declaration.data.haskell
---   ^^^^^^^^^^^ constant.other.haskell entity.name.class.haskell
---               ^ keyword.operator.haskell
---                 ^^^ meta.data_declaration.haskell entity.name.constructor.haskell
---                     ^ keyword.operator.haskell
---                           ^^^ storage.type.haskell support.type.haskell
+   {- {- -} -} 23*36
+-- ^^ punctuation.definition.comment.begin.haskell
+-- ^^^^^^^^^^^ comment.block.haskell
+--          ^^ punctuation.definition.comment.end.haskell
+--            ^ - comment.block.haskell
 
-data MyMaybe x = MyMaybe | MyJust x
--- ^ keyword.declaration.data.haskell
---   ^^^^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---           ^ meta.data_declaration.haskell variable.generic.haskell
---               ^^^^^^^ meta.data_declaration.haskell entity.name.constructor.haskell
---                       ^ keyword.operator.haskell
---                         ^^^^^^ entity.name.function entity.name.constructor.haskell
---                                ^ variable.generic.haskell
+   {- {-# -} -} 23*36
+-- ^^ punctuation.definition.comment.begin.haskell
+-- ^^^^^^^^^^^^ comment.block.haskell - meta.preprocessor.haskell
+--           ^^ punctuation.definition.comment.end.haskell
+--             ^ - comment.block.haskell
 
-data LongDataType = Foo_a | Bar_a |
--- ^ keyword.declaration.data.haskell
---   ^^^^^^^^^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---                ^ meta.data_declaration.haskell keyword.operator.haskell
---                  ^^^^^ meta.data_declaration.haskell entity.name.constructor.haskell
+   {- {-# {- test -} -} -} 23*36
+-- ^^ punctuation.definition.comment.begin.haskell
+-- ^^^^^^^^^^^^^^^^^^^^^^^ comment.block.haskell - meta.preprocessor.haskell
+--                      ^^ punctuation.definition.comment.end.haskell
+--                        ^ - comment.block.haskell
+
+   class (Functor t, Foldable t) => Traversable t where
+-- ^^^^^ keyword.other.haskell
+-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.class.haskell
+   {-# MINIMAL traverse | sequenceA LANGUAGE #-}
+-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.preprocessor.haskell
+--                                              ^ - meta.preprocessor.haskell
+--                                   ^^^^^^^ keyword.other.preprocessor.haskell
+
+-- | Map each element of a structure to an action,
+-- evaluate these actions from left to right, and
+-- collect the results. For a version that ignores
+-- the results see 'Data.Foldable.traverse_'.
+-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.line.double-dash.haskell
+
+   traverse :: Applicative f =>
+-- ^^^^^^^^ entity.name.function.haskell
+--          ^^ keyword.other.double-colon.haskell
+--             ^^^^^^^^^^^ storage.type.haskell
+-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.type-declaration.haskell
+--                           ^^ keyword.other.big-arrow.haskell
+    (a -> f b)
+-- ^^^^^^^^^^^^ meta.function.type-declaration.haskell
+--     ^^ keyword.other.arrow.haskell
+    -> t a
+-- ^^^^^^^^ meta.function.type-declaration.haskell
+--  ^^ keyword.other.arrow.haskell
+    -> f (t b)
+-- ^^^^^^^^^^^^ meta.function.type-declaration.haskell
+--  ^^ keyword.other.arrow.haskell
+   traverse f = sequenceA . fmap f
+--            ^ keyword.operator.haskell
 --                        ^ keyword.operator.haskell
---                          ^^^^^ entity.name.function entity.name.constructor.haskell
---                                ^ keyword.operator.haskell
-  Quux | Llama x y z
--- ^^^ entity.name.function entity.name.constructor.haskell
+
+-- | Evaluate each action in the structure from
+-- left to right, and collect the results.
+-- For a version that ignores the results see
+-- 'Data.Foldable.sequenceA_'.
+   sequenceA ∷ Applicative f ⇒ t (f a) → f (t a)
+-- ^^^^^^^^^ entity.name.function.haskell
+--           ^ keyword.other.double-colon.haskell
+--             ^^^^^^^^^^^ storage.type.haskell
+--                           ^ keyword.other.big-arrow.haskell
+--                                     ^ keyword.other.arrow.haskell
+   sequenceA = traverse id
+--           ^ keyword.operator.haskell
+
+-- | Evaluate each action in the structure from
+-- left to right, and collect the results.
+-- For a version that ignores the results see
+-- 'Data.Foldable.sequenceA_'.
+   sequenceA ∷ Applicative f => t (f a) -> f (t a)
+-- ^^^^^^^^^ entity.name.function.haskell
+--           ^ keyword.other.double-colon.haskell
+--             ^^^^^^^^^^^ storage.type.haskell
+--                           ^ keyword.other.big-arrow.haskell
+--                                      ^ keyword.other.arrow.haskell
+   sequenceA = traverse id
+--           ^ keyword.operator.haskell
+--
+-- infix operators
+--
+   a a = (+) a 2
 --     ^ keyword.operator.haskell
---       ^^^^^ entity.name.function entity.name.constructor.haskell
---             ^ variable.generic.haskell
---               ^ variable.generic.haskell
---                 ^ variable.generic.haskell
+--       ^^^ entity.name.function.infix.haskell
+--             ^ constant.numeric.integer.decimal.haskell
+   a a = (-) a 2
+--     ^ keyword.operator.haskell
+--       ^^^ entity.name.function.infix.haskell
+--             ^ constant.numeric.integer.decimal.haskell
+   a a = (*) a 2
+--     ^ keyword.operator.haskell
+--       ^^^ entity.name.function.infix.haskell
+--             ^ constant.numeric.integer.decimal.haskell
+   a a = (/) a 2
+--     ^ keyword.operator.haskell
+--       ^^^ entity.name.function.infix.haskell
+--             ^ constant.numeric.integer.decimal.haskell
 
-data TediouslyEnumerated = Foo_d
--- ^ keyword.declaration.data.haskell
---   ^^^^^^^^^^^^^^^^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---                       ^ meta.data_declaration.haskell keyword.operator.haskell
---                         ^^^^^ meta.data_declaration.haskell entity.name.constructor.haskell
-    | Bar_d
+-- Tests for #1320, #1880.
+
+   class TooMany a where
+     tooMany :: a -> Bool
+-- ^^^^^^^^^^^^^^^^^^^^^^ meta.function.type-declaration.haskell
+     tooManyToo ::
+-- ^^^^^^^^^^^^^^^ meta.function.type-declaration.haskell
+       a -> Bool
+-- ^^^^^^^^^^^^^ meta.function.type-declaration.haskell
+
+   instance TooMany Int where
+-- ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.instance.haskell
+     tooMany n = n > 42
+
+   foldBoolGuard :: a -> a -> Bool -> a
+-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.type-declaration.haskell
+   foldBoolGuard x y z
+-- ^^^^^^^^^^^^^^^^^^^ source.haskell
+     | z         = y
+--   ^ keyword.operator.haskell
+     | otherwise = x
+
+   countTheBeforeVowel :: String
+   -- This comment should not interrupt the type signature.
+
+   -- The blank line above should not interrupt the type signature.
+
+   {-
+      This multiline comment should
+      not interrupt the type signature.
+   -}
+
+     -> Integer
+-- ^^^^^^^^^^^^ meta.function.type-declaration.haskell
+   countTheBeforeVowel = undefined
+
+
+--NUMBERS
+
+    0
+--  ^ constant.numeric.integer.decimal
+
+    1234567890
+--  ^^^^^^^^^^ constant.numeric.integer.decimal
+
+    0o1234567
+--  ^^^^^^^^^ constant.numeric.integer.octal
+--  ^^ punctuation.definition.numeric.base.haskell
+
+    1.
+--  ^ constant.numeric.integer.decimal
+--   ^ keyword.operator.haskell
+
+    .2
 --  ^ keyword.operator.haskell
---    ^^^^^ entity.name.function entity.name.constructor.haskell
-    | Quux_d a b c
---  ^ keyword.operator.haskell
---    ^^^^^^ entity.name.function entity.name.constructor.haskell
---           ^ variable.generic.haskell
---             ^ variable.generic.haskell
---               ^ variable.generic.haskell
+--   ^ constant.numeric.integer.decimal
 
-data DerivedType = DerivedType Int deriving Show
--- ^ meta.data_declaration.haskell keyword.declaration.data.haskell
---   ^^^^^^^^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---               ^ meta.data_declaration.haskell keyword.operator.haskell
---                 ^^^^^^^^^^^ meta.data_declaration.haskell entity.name.constructor.haskell
---                             ^^^ storage.type.haskell support.type.haskell
---                                 ^^^^^^^^ meta.data_deriving.haskell keyword.other.haskell
---                                          ^^^^ meta.data_deriving.haskell storage.type.haskell support.type.haskell
+    12.345
+--  ^^^^^^ constant.numeric.float.decimal
+--    ^ punctuation.separator.decimal
 
+    1e10
+--  ^^^^ constant.numeric.float.decimal
 
-data DerivedType' = DerivedType Int deriving
--- ^ meta.data_declaration.haskell keyword.declaration.data.haskell
---   ^^^^^^^^^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---                ^ meta.data_declaration.haskell keyword.operator.haskell
---                  ^^^^^^^^^^^ meta.data_declaration.haskell entity.name.constructor.haskell
---                              ^^^ storage.type.haskell support.type.haskell
---                                  ^^^^^^^^ meta.data_deriving.haskell keyword.other.haskell
--- <- meta.data_declaration.haskell keyword.declaration.data.haskell
-  Show
--- ^^^ meta.data_deriving.haskell storage.type.haskell support.type.haskell
+    0.5e+0
+--  ^^^^^^ constant.numeric.float.decimal
+--   ^ punctuation.separator.decimal
 
-data DerivedType'' = DerivedType Int
--- ^ meta.data_declaration.haskell keyword.declaration.data.haskell
---   ^^^^^^^^^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---                 ^ meta.data_declaration.haskell keyword.operator.haskell
---                   ^^^^^^^^^^^ meta.data_declaration.haskell entity.name.constructor.haskell
---                               ^^^ storage.type.haskell support.type.haskell
-  deriving Show
--- ^^^^^^^ meta.data_deriving.haskell keyword.other.haskell
---         ^^^^ meta.data_deriving.haskell storage.type.haskell support.type.haskell
--- <- meta.data_deriving.haskell
+    9e-1
+--  ^^^^ constant.numeric.float.decimal
 
-data Type = Type Int deriving
--- ^ meta.data_declaration.haskell keyword.declaration.data.haskell
---   ^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---        ^ meta.data_declaration.haskell keyword.operator.haskell
---          ^^^^ meta.data_declaration.haskell entity.name.constructor.haskell
---               ^^^ storage.type.haskell support.type.haskell
---                   ^^^^^^^^ meta.data_deriving.haskell keyword.other.haskell
-    (Eq, Show) -- deriving on following line
---  ^ meta.data_deriving.haskell keyword.operator.haskell
---   ^^ storage.type.haskell support.type.haskell
---     ^ meta.data_deriving.haskell meta.deriving.haskell punctuation.separator.comma.haskell
---       ^^^^ meta.data_deriving.haskell meta.deriving.haskell storage.type.haskell support.type.haskell
---           ^ meta.data_deriving.haskell meta.deriving.haskell keyword.operator.haskell
---             ^^ meta.data_deriving.haskell comment.line.double-dash.haskell punctuation.definition.comment.haskell
+    0x0
+--  ^^^ constant.numeric.integer.hexadecimal
+--  ^^ punctuation.definition.numeric.base
 
-data Type' foo = Type foo deriving (Eq, Show)
+    0XdeafBEEF42
+--  ^^^^^^^^^^^^ constant.numeric.integer.hexadecimal
+--  ^^ punctuation.definition.numeric.base
 
+   {-# OPTIONS_HADDOCK not-home #-}
+-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.preprocessor.haskell
+--                                 ^ - meta.preprocessor.haskell
+--     ^^^^^^^^^^^^^^^ keyword.other.preprocessor.haskell
 
-a = "asdf"
-b = 2
+  data Record =
+    Record {
+        recordInt :: Int
+      , recordString :: String
+      , recordDouble :: Double
+      , recordRational :: Rational
+      } deriving (Eq, Ord, Generic)
+        deriving (Read, Show) via (Quiet Record)
+--                            ^^^ keyword.other.haskell
+--                            ^^^^^^^^^^^^^^^^^^ meta.deriving.haskell
 
-ioFunc :: IO ()
+getCurrencies
+-- ^^^^^^^^^^ entity.name.function.haskell
+  :: IO (Either ErrorMessage [Currency])
+getCurrencies = ...
 
-newtype Fribbles x = Fribbles x
+  data Outrageous =
+      Flipper Record
+    | Int :! Int
+    | Double :@ Double
+--            ^ keyword.operator.haskell
+    | Int `Quux` Double
+    | String :# Record
+--            ^ keyword.operator.haskell
+    | Simple :$ Outrageous
+    | DontDoThis { outrageousInt :: Int, outrageousString :: String }
+      deriving (Eq, Ord, Generic)
+      deriving (Read, Show) via (Quiet Outrageous)
 
-class Myclass a
-  -- Class before where comment
-  -- <- comment.line.double-dash.haskell
-  where MyClass :: {
-    _f1 :: Int
-  , _f2 :: String
-  }
+  genSimple :: Gen Simple
+  genSimple =
+    Simple
+      <$> genInt
+      <*> genString
+--     ^ keyword.operator.haskell
+      <*> genDouble
+      <*> genRational
 
-myFunction1
-  :: Int -- Type signature on next line
-  -> String
-myFunction1 = undefined
-
-myFunction2 :: Int -> String -- Type signature
-myFunction2 = undefined
-
-myFunction2' :: Int → String
-myFunction2' = undefined
-
-myFunction2a :: Fribbles a -> ()
-myFunction2a a = undefined
-
-myFunction2b :: (Myclass a) => Fribbles a -> ()
-myFunction2b a = undefined
-
-myFunction3 :: Int            -- Multiline type signature (PASS)
-            -> String
-myFunction3 = undefined
-
-myFunction4 :: (Myclass a) => -- Multiline type signature w/constraint (PASS)
-               Fribbles a
-            -> String
-myFunction4 _v =
-  let
-      animaniac = 0
-  in  show animaniac
-
-mymodule -- function containing "module" (PASS)
-  = undefined
-
-myimport -- function containing "import" (PASS)
-  = undefined
-
-
--- Multiline comments with pragmas in the middle:
-{-
-{-# INLINE foo #-}
-foo :: Int -> Int
-foo x = x
-     -} -- should be a comment
---    ^ comment.block.haskell
---                           ^ comment.line.double-dash.haskell
-
-c = 1
-
--- Multi-line strings
-x = "this is my\
-    \a\
-    \string"
-    -- The `\a` should not be highlighted (PASS)
-
-
-class Foo a where
-  foo :: Int -> a
-
-instance Foo Int where
-  foo 2 = 3
-  foo _ = 4
-
-class (Eq a) => Bar a where
-  fob :: Int -> a
-
-
-keys'Mb -- should not detect `Mb` as a constructor ("constant") (PASS)
-  = undefined
-
-data D where{A :: Int -> D; B :: D } -- A should be highlighted (PASS)
-
-
-{- Multiline block comment.
-
-   Last line has an -- inline comment indicator -}
-
-data MyCTor = MyCtor
-
-
--- The following things shouldn't be comments but operators:
-_ --! _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --# _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --$ _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --% _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --& _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --* _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --+ _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --. _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --/ _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --< _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --= _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --> _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --? _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --@ _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --\ _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --^ _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --| _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --~ _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --: _ = undefined
---  ^ keyword.operator.function.infix.haskell
-_ --⋆ _ = undefined
---  ^ keyword.operator.function.infix.haskell
-
-
--- The following should be comments:
--- <- comment.line.double-dash.haskell
--- a
--- <- comment.line.double-dash.haskell
---- a
--- <- comment.line.double-dash.haskell
----- a
--- <- comment.line.double-dash.haskell
---_ _ = undefined
---" _ = undefined
---' _ = undefined
-
---( _ = undefined
---) _ = undefined
---, _ = undefined
---; _ = undefined
---[ _ = undefined
---] _ = undefined
---` _ = undefined
---{ _ = undefined
---} _ = undefined
-
-guarded_func x
-  | x == 0
-  = True
-  | x < 0
-  = False
-  | otherwise
-  = False
-
-
-data LongDataType' = Foo_b | Bar_b |
--- ^ meta.data_declaration.haskell keyword.declaration.data.haskell
---   ^^^^^^^^^^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---                 ^ meta.data_declaration.haskell keyword.operator.haskell
---                   ^^^^^ meta.data_declaration.haskell entity.name.function entity.name.constructor.haskell
---                         ^ keyword.operator.haskell
---                           ^^^^^ entity.name.function entity.name.constructor.haskell
---                                 ^ keyword.operator.haskell
-  Quux_b l m  n | Lemma_b
--- ^^^^^ entity.name.function entity.name.constructor.haskell
---       ^ variable.generic.haskell
---         ^ variable.generic.haskell
---            ^ variable.generic.haskell
---              ^ keyword.operator.haskell
---                ^^^^^^^ entity.name.function entity.name.constructor.haskell
-
-data LongDataType'' = Foo_c | Bar_c |
--- ^ meta.data_declaration.haskell keyword.declaration.data.haskell
---   ^^^^^^^^^^^^^^ meta.data_declaration.haskell constant.other.haskell entity.name.class.haskell
---                  ^ meta.data_declaration.haskell keyword.operator.haskell
---                    ^^^^^ meta.data_declaration.haskell entity.name.function entity.name.constructor.haskell
---                          ^ keyword.operator.haskell
---                            ^^^^^ entity.name.function entity.name.constructor.haskell
---                                  ^ keyword.operator.haskell
-  Quux_c String | Lemma_c derived | Kragon
--- ^^^^^ entity.name.function entity.name.constructor.haskell
---       ^^^^^^ storage.type.haskell support.type.haskell
---              ^ keyword.operator.haskell
---                ^^^^^^^ entity.name.function entity.name.constructor.haskell
---                        ^^^^^^^ variable.generic.haskell
---                                ^ keyword.operator.haskell
---                                  ^^^^^^ entity.name.function entity.name.constructor.haskell
+  genOutrageous :: Gen Outrageous
+  genOutrageous =
+    Gen.recursive Gen.choice [
+        Flipper <$> genRecord
+      , (:!) <$> genInt <*> genInt
+      , (:@) <$> genDouble <*> genDouble
+--       ^^ entity.name.function.infix.haskell
+      , Quux <$> genInt <*> genDouble
+      , (:#) <$> genString <*> genRecord
+--       ^^ entity.name.function.infix.haskell
+      , DontDoThis <$> genInt <*> genString
+      ] [
+        Gen.subtermM genOutrageous (\x -> (:$) <$> genSimple <*> pure x)
+      ]
