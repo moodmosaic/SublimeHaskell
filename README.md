@@ -12,7 +12,7 @@ The ultimate goal is to turn this into a SublimeHaskell-*Lite*; support only [hs
 
 Provided with this package is a *dedicated* Monokai-based color scheme, tuned by myself for Haskell files. To enable it you'll need to create the following file:
 
-Haskell-SublimeHaskell.sublime-settings with content:
+`Haskell-SublimeHaskell.sublime-settings` with content:
 
 ```json
 // These settings override both User and Default settings for the Haskell-SublimeHaskell syntax
@@ -23,7 +23,7 @@ Haskell-SublimeHaskell.sublime-settings with content:
 
 If you want to use this syntax globally (outside the context of SublimeHaskell, even if you have the plugin turned off) then you'll need to create another file:
 
-Haskell.sublime-settings with content:
+`Haskell.sublime-settings` with content:
 
 ```json
 // These settings override both User and Default settings for the Haskell syntax
