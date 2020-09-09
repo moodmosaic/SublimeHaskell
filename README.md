@@ -6,6 +6,8 @@ This is *my* fork of [SublimeHaskell/SublimeHaskell][SublimeHaskell/SublimeHaske
 
 The ultimate goal is to turn this into a SublimeHaskell-*Lite*; support only [hsdev][hsdev], put everything in a single source file, remove everything except icons.
 
+---
+
 ### Haskell color scheme
 
 Provided with this package is a *dedicated* Monokai-based color scheme, tuned by myself for Haskell files. To enable it you'll need to create the following file:
