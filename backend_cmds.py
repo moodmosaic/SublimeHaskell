@@ -120,4 +120,4 @@ def cabal_project_status(view, backend_mgr):
         project_name = '_unknown_'
 
     active_backend = backend_mgr.active_backend()
-    view.set_status('sublime_haskell_cabal', 'cabal: {0} [{1}]'.format(project_name, active_backend.backend_name()))
+    # view.set_status('sublime_haskell_cabal', 'cabal: {0} [{1}]'.format(project_name, active_backend.backend_name()))
